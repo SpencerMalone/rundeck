@@ -51,7 +51,7 @@ class CommitJobsAction extends BaseAction implements GitExportAction {
                     BuilderUtil.property {
                         string P_MESSAGE
                         title "Commit Message"
-                        description "Enter a commit message. Committing to branch: `" + plugin.branch + '`'
+                        description "Enter a commit message."
                         required true
                         renderingAsTextarea()
                     },
@@ -69,6 +69,13 @@ class CommitJobsAction extends BaseAction implements GitExportAction {
                         description "Check to push to the remote"
                         required false
                         defaultValue'true'
+                    },
+
+                    BuilderUtil.property {
+                        string PushAction.P_OVERRIDE_BRANCH
+                        title "Override Branch"
+                        description "Optionally enter a second branch to push to (if pushing). If blank, will default to: `" + plugin.branch + '`'
+                        required false
                     },
             ]
             )

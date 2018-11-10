@@ -38,6 +38,7 @@ import org.rundeck.plugin.scm.git.config.Config
 import org.rundeck.plugin.scm.git.config.Export
 import org.rundeck.plugin.scm.git.exp.actions.CommitJobsAction
 import org.rundeck.plugin.scm.git.exp.actions.TagAction
+import org.rundeck.plugin.scm.git.exp.actions.PushAction
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -344,11 +345,12 @@ class GitExportPluginSpec extends Specification {
         then:
         view.title == "Commit Changes to Git"
         view.actionId == GitExportPlugin.JOB_COMMIT_ACTION_ID
-        view.properties.size() == 3
+        view.properties.size() == 4
         view.properties*.name == [
                 CommitJobsAction.P_MESSAGE,
                 TagAction.P_TAG_NAME,
-                CommitJobsAction.P_PUSH
+                CommitJobsAction.P_PUSH,
+                PushAction.P_OVERRIDE_BRANCH
         ]
 
     }

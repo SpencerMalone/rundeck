@@ -35,6 +35,8 @@ import org.rundeck.plugin.scm.git.GitUtil
  */
 class PushAction extends BaseAction implements GitExportAction {
 
+    public static final String P_OVERRIDE_BRANCH = 'overrideBranch'
+
     PushAction(final String id, final String title, final String description) {
         super(id, title, description)
     }
@@ -65,6 +67,12 @@ Pushing to remote branch: `${plugin.branch}`"""
                         string TagAction.P_MESSAGE
                         title "Tag Message"
                         description "Enter a message for the annotated Tag."
+                        required false
+                    },
+                    BuilderUtil.property {
+                        string P_OVERRIDE_BRANCH
+                        title "Override Branch"
+                        description "Optionally enter an override branch to push to, instead of the configured default."
                         required false
                     },
 
@@ -108,7 +116,13 @@ Pushing to remote branch: `${plugin.branch}`"""
 
         def pushb = plugin.git.push()
         pushb.setRemote(BaseGitPlugin.REMOTE_NAME)
-        pushb.add(plugin.branch)
+
+        if (input[P_OVERRIDE_BRANCH]) {
+            pushb.add(plugin.branch + ":" + input[P_OVERRIDE_BRANCH])
+        } else {
+            pushb.add(plugin.branch)
+        }
+
         plugin.setupTransportAuthentication(plugin.sshConfig, context, pushb)
 
         if (tagref) {
